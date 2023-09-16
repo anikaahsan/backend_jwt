@@ -3,12 +3,12 @@ from account.models import CustomUser
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
-    confirm_password=serializers.CharField()
+    # confirm_password=serializers.CharField()
     
 
     class Meta:
         model=CustomUser
-        fields=['username','email','password','confirm_password']
+        fields=['username','email','password']
 
     #validatingpassword and confirm password while registering
     # def validate(self, attrs):
@@ -22,13 +22,25 @@ class RegistrationSerializer(serializers.ModelSerializer):
     #   return CustomUser.objects.create_user(**validated_data)
     
 
-    def create(self, validated_data):
-        if validated_data.get('password') != validated_data.get('confirm_password'):
-            raise serializers.ValidationError("Those password don't match") 
+    # def create(self, validated_data):
+    #     if validated_data.get('password') != validated_data.get('confirm_password'):
+    #         raise serializers.ValidationError("Those password don't match") 
 
-         # confirm_password should not be sent to create as it is not part of User model
-        validated_data.pop('confirm_password') 
-        return super().create(validated_data)
+    #      # confirm_password should not be sent to create as it is not part of User model
+    #     validated_data.pop('confirm_password') 
+    #     return super().create(validated_data)
+
+    def create(self, validated_data):
+        user = CustomUser.objects.create(
+            username=validated_data['username'],
+            email=validated_data['email'],
+            
+        )
+
+        user.set_password(validated_data['password'])
+        user.save()
+
+        return user
          
 
 class LoginSerializer(serializers.ModelSerializer):

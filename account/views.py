@@ -22,13 +22,14 @@ class RegistrationView(APIView):
         serializer=RegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user=serializer.save()
-        token=get_token_for_user(user)
+        # token=get_token_for_user(user)
 
         context=dict(
-            token=token,
+            # token=token,
             msg='registration succesful'
         )
-        return Response(context,status=status.HTTP_201_CREATED)
+        # return Response(context,status=status.HTTP_201_CREATED)
+        return Response('registration successful')
 
        
 
@@ -44,9 +45,10 @@ class LoginView(APIView):
 
         if user is not None:
             token=get_token_for_user(user)
+
             context=dict(
             token=token,
-            msg='login succesful'
+            # msg='login succesful'
         )
             return Response(context,status=status.HTTP_201_CREATED)
         else:
@@ -57,11 +59,11 @@ class ProfileView(APIView) :
     permission_classes=(IsAuthenticated,)
 
     def get(self,request):
-        serializer=ProfileSerializer(request.user)
-        return Response(serializer.data,status=status.HTTP_200_OK)
+        # serializer=ProfileSerializer(request.user)
+        return Response(status=status.HTTP_200_OK)
 
 class ProductView(APIView):
     permission_classes=(IsAuthenticated,)
 
     def get(self,request):
-        pass
+        return Response('nimusoft')
